@@ -1,0 +1,17 @@
+- hosts: localhost
+  vars:
+    daemon_json:
+      hosts:
+        - "unix://"
+        - "tcp://0.0.0.0:2375"
+      log-level: debug
+      log-driver: json-file
+      log-opts:
+          max-file: "3"
+          max-size: "10m"
+  remote_user: root
+  roles:
+  - common
+#  - angstwad.docker.ubuntu 
+  - chat
+  

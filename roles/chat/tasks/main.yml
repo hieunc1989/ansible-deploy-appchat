@@ -1,0 +1,28 @@
+---
+- name: create rabbitmq container
+  docker_container:
+    name: rabbitmq
+    image: hieunc/rabbitmq:3.7
+    state: started
+    network_mode: host
+- name: checkout chap app 
+  git:
+    repo: 'https://github.com/hieunc1989/chat.git'
+    dest: /srv/chatapp
+- name: Build chap app
+  docker_image:
+    path: /srv/chatapp
+    name: hieunc/chat
+    tag: 1.1
+    push: no
+- name: login to docker registry
+  docker_login:
+    username: "{{ docker_hub_username }}"
+    password: "{{ docker_hub_password }}"
+    email: "{{ docker_hub_email }}"
+- name: deploy app chat container
+  docker_container:
+    name: chat
+    image: hieunc/chat:1.1
+    state: started
+    network_mode: host
